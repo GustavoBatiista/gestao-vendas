@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gvendas.gestao_vendas.entidades.Categoria;
@@ -17,6 +18,7 @@ import com.gvendas.gestao_vendas.service.CategoriaService;
 
 import javax.validation.Valid;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +41,7 @@ public class CategoriaController {
 
     @ApiOperation(value = "Listar por codigo")
     @GetMapping("/{codigo}")
-    public ResponseEntity<Optional<Categoria>> buscarPorCodigo(@PathVariable Long codigo) {
+    public ResponseEntity<Categoria> buscarPorCodigo(@PathVariable Long codigo) {
         Optional<Categoria> categoria = categoriaService.buscarPorCodigo(codigo);
         return categoria.isPresent() ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
     }
@@ -55,6 +57,13 @@ public class CategoriaController {
     @PutMapping("/{codigo}")
     public ResponseEntity<Categoria> atualizar(@PathVariable Long codigo,@Valid @RequestBody Categoria categoria) {
         return ResponseEntity.ok(categoriaService.atualizar(codigo, categoria));
+    }
+
+    @ApiOperation(value = "Deletar")
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long codigo) {
+        categoriaService.deletar(codigo);
     }
 
 }

@@ -35,6 +35,11 @@ public class CategoriaService {
         return categoriaRepository.save(categoriaSalvar);
     }
 
+
+    public void deletar(Long codigo) {
+        categoriaRepository.deleteById(codigo);
+    }
+
     private Categoria validarCategoriaExiste(Long codigo) {
         Optional<Categoria> categoria = buscarPorCodigo(codigo);
         if (categoria.isEmpty()) {
