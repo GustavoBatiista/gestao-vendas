@@ -13,3 +13,16 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: gvendas_db
     # (this is just an example, not intended to be a production configuration)
+
+  jaeger:
+    image: cr.jaegertracing.io/jaegertracing/jaeger:2.13.0
+    container_name: jaeger
+    ports:
+      - 16686:16686 
+      - 14268:14268
+      - 4317:4317 
+      - 4318:4318 
+      - 5778:5778 
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 9411:9411 

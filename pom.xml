@@ -77,7 +77,18 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+        <!-- Jaeger -->
+        <dependency>
+                <groupId>io.opentracing.contrib</groupId>
+                <artifactId>opentracing-spring-jaeger-web-starter</artifactId>
+                <version>3.3.1</version>
+        </dependency>
 
+        <dependency>
+                <groupId>io.opentracing.contrib</groupId>
+                <artifactId>opentracing-jdbc</artifactId>
+                <version>0.2.12</version>
+        </dependency>
         <!-- Tests -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -93,7 +104,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
             <!-- Compiler plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

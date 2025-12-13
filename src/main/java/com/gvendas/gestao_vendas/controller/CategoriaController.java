@@ -43,7 +43,7 @@ public class CategoriaController {
     @GetMapping("/{codigo}")
     public ResponseEntity<Categoria> buscarPorCodigo(@PathVariable Long codigo) {
         Optional<Categoria> categoria = categoriaService.buscarPorCodigo(codigo);
-        return categoria.isPresent() ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
+        return categoria.isPresent() ? ResponseEntity.ok(categoria.get()) : ResponseEntity.notFound().build();
     }
 
     @ApiOperation(value = "Salvar")
