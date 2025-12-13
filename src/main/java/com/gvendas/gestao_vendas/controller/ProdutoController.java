@@ -1,7 +1,6 @@
 package com.gvendas.gestao_vendas.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.gvendas.gestao_vendas.entidades.Produto;
 import com.gvendas.gestao_vendas.service.ProdutoService;
@@ -44,21 +43,21 @@ public class ProdutoController {
 
     @ApiOperation(value = "Salvar", nickname = "salvar")
     @PostMapping
-    public ResponseEntity<Produto> salvar(@Valid @RequestBody Produto produto) {
+    public ResponseEntity<Produto> salvar(@PathVariable Long codigoCategoria,@Valid @RequestBody Produto produto) {
         Produto produtoSalvo = produtoService.salvar(produto);
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalvo);
     }
 
     @ApiOperation(value = "Atualizar", nickname = "atualizar")
     @PutMapping("/{codigo}")
-    public ResponseEntity<Produto> atualizar(@PathVariable Long codigo, @Valid @RequestBody Produto produto) {
+    public ResponseEntity<Produto> atualizar(@PathVariable Long codigo, @PathVariable Long codigoCategoria, @Valid @RequestBody Produto produto) {
         return ResponseEntity.ok(produtoService.atualizar(codigo, produto));
     }
 
     @ApiOperation(value = "Deletar", nickname = "deletar")
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar(@PathVariable Long codigo) {
+    public void deletar(@PathVariable Long codigo, @PathVariable Long codigoCategoria) {
         produtoService.deletar(codigo);
     }
 }
