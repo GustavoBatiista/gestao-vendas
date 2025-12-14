@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.gvendas.gestao_vendas.entidades.Produto;
@@ -18,6 +17,9 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    @Autowired
+    private CategoriaService categoriaService;
+
     public List<Produto> listarTodos(Long codigoCategoria) {
         return produtoRepository.findByCategoriaCodigo(codigoCategoria);
     }
@@ -27,6 +29,7 @@ public class ProdutoService {
     }
 
     public Produto salvar(Produto produto) {
+        validarCategoriaExiste(produto.getCategoria().getCodigo());
         validarProdutoDuplicado(produto);
         return produtoRepository.save(produto);
     }
@@ -42,19 +45,37 @@ public class ProdutoService {
         produtoRepository.deleteById(codigo);
     }
 
+    private void validarCategoriaExiste(Long codigoCategoria) {
+        if (codigoCategoria == null) {
+            throw new RegraNegocioException("A categoria não pode ser nula");
+        }
+        if (categoriaService.buscarPorCodigo(codigoCategoria).isEmpty()) {
+            throw new RegraNegocioException(
+                    String.format("A categoria de código %s não existe no cadastro", codigoCategoria));
+        }
+    }
+
     private Produto validarProdutoExiste(Long codigo, Long codigoCategoria) {
         Produto produto = produtoRepository.BuscarPorCodigo(codigo, codigoCategoria);
         if (produto == null) {
-            throw new EmptyResultDataAccessException(1);
+            throw new RegraNegocioException("Produto não encontrado");
         }
         return produto;
     }
 
     private void validarProdutoDuplicado(Produto produto) {
-        Produto produtoEncontrado = produtoRepository.BuscarPorCodigo(produto.getCodigo(), produto.getCategoria().getCodigo());
-        if (produtoEncontrado != null && produtoEncontrado.getCodigo() != produto.getCodigo()) {
-            throw new RegraNegocioException(
-                    String.format("O produto %s já está cadastrada", produto.getDescricao()).toUpperCase());
+        Optional<Produto> produtoEncontrado = produtoRepository.findByCategoriaCodigoAndDescricao(
+                produto.getCategoria().getCodigo(),
+                produto.getDescricao());
+
+        if (produtoEncontrado.isPresent()) {
+           
+        
+            if (produto.getCodigo() == null ||
+                    !produtoEncontrado.get().getCodigo().equals(produto.getCodigo())) {
+                throw new RegraNegocioException(
+                        String.format("O produto %s já está cadastrado", produto.getDescricao()).toUpperCase());
+            }
         }
     }
 }

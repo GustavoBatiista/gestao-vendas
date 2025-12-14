@@ -2,6 +2,9 @@ package com.gvendas.gestao_vendas.entidades;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,23 +23,29 @@ public class Produto {
     @Column(name = "codigo")
     private Long codigo;
 
+    @NotBlank(message = "Descrição")
+    @Length(min = 3, max = 100, message = "Descrição")
     @Column(name = "descricao")
     private String descricao;
 
     @Column(name = "quantidade")
+    @NotNull(message = "Quantidade")
     private Integer quantidade;
 
     @Column(name = "preco_custo")
+    @NotNull(message = "Preço de custo")
     private BigDecimal precoCusto;
 
     @Column(name = "preco_venda")
+    @NotNull(message = "Preço de venda")
     private BigDecimal precoVenda;
 
+    @Length(max = 500, message = "Observação")
     @Column(name = "observacao")
     private String observacao;
-
     @ManyToOne
     @JoinColumn(name = "codigo_categoria", referencedColumnName = "codigo")
+    @NotNull(message = "Código categoria é obrigatório")
     private Categoria categoria;
 
     public Long getCodigo() {

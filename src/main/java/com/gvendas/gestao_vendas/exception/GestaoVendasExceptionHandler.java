@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String CONSTANT_VALIDATION_NOT_BLANK = "NotBlank";
+    private static final String CONSTANT_VALIDATION_NOT_NULL = "NotNull";
     private static final String CONSTANT_VALIDATION_LENGTH = "Length";
 
     @Override
@@ -33,29 +34,31 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ResponseEntity<Object> handleEmptyResultDataAcessException(EmptyResultDataAccessException ex,WebRequest request){
+    public ResponseEntity<Object> handleEmptyResultDataAcessException(EmptyResultDataAccessException ex,
+            WebRequest request) {
         String msgUsuario = "Recurso não encontrado";
         String msgDesenvolvedor = ex.toString();
         List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
-        return handleExceptionInternal(ex, erros, new HttpHeaders(),HttpStatus.NOT_FOUND , request);
+        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex,WebRequest request){
+    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
+            WebRequest request) {
         String msgUsuario = "Recurso não encontrado";
         String msgDesenvolvedor = ex.toString();
         List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
-        return handleExceptionInternal(ex, erros, new HttpHeaders(),HttpStatus.BAD_REQUEST , request);
+        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
-
     @ExceptionHandler(RegraNegocioException.class)
-    public ResponseEntity<Object> handleRegraNegocioException(RegraNegocioException ex,WebRequest request){
+    public ResponseEntity<Object> handleRegraNegocioException(RegraNegocioException ex, WebRequest request) {
         String msgUsuario = ex.getMessage();
         String msgDesenvolvedor = ex.getMessage();
         List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
-        return handleExceptionInternal(ex, erros, new HttpHeaders(),HttpStatus.BAD_REQUEST , request);
+        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
     private List<Erro> gerarListaDeErros(BindingResult bindingResult) {
         List<Erro> erros = new ArrayList<Erro>();
         bindingResult.getFieldErrors().forEach(fielError -> {
@@ -70,6 +73,10 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
 
     private String tratarMensagemDeErroParaUsuario(FieldError fielError) {
         if (fielError.getCode().equals(CONSTANT_VALIDATION_NOT_BLANK)) {
+            return fielError.getDefaultMessage().concat(" É obrigatório.");
+        }
+
+        if (fielError.getCode().equals(CONSTANT_VALIDATION_NOT_NULL)) {
             return fielError.getDefaultMessage().concat(" É obrigatório.");
         }
 
