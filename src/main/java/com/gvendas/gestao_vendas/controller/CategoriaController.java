@@ -46,20 +46,20 @@ public class CategoriaController {
         return categoria.isPresent() ? ResponseEntity.ok(categoria.get()) : ResponseEntity.notFound().build();
     }
 
-    @ApiOperation(value = "Salvar", nickname = "salvar")
+    @ApiOperation(value = "Salvar", nickname = "salvar categoria")
     @PostMapping
     public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria) {
         Categoria categoriaSalva = categoriaService.salvar(categoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
     }
 
-    @ApiOperation(value = "Atualizar", nickname = "atualizar")
+    @ApiOperation(value = "Atualizar", nickname = "atualizar categoria")
     @PutMapping("/{codigo}")
     public ResponseEntity<Categoria> atualizar(@PathVariable Long codigo,@Valid @RequestBody Categoria categoria) {
         return ResponseEntity.ok(categoriaService.atualizar(codigo, categoria));
     }
 
-    @ApiOperation(value = "Deletar", nickname = "deletar")
+    @ApiOperation(value = "Deletar", nickname = "deletar categoria")
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long codigo) {

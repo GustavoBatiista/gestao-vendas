@@ -41,20 +41,20 @@ public class ProdutoController {
         return produto != null ? ResponseEntity.ok(produto) : ResponseEntity.notFound().build();
     }
 
-    @ApiOperation(value = "Salvar", nickname = "salvar")
+    @ApiOperation(value = "Salvar", nickname = "salvar produto")
     @PostMapping
     public ResponseEntity<Produto> salvar(@PathVariable Long codigoCategoria,@Valid @RequestBody Produto produto) {
         Produto produtoSalvo = produtoService.salvar(produto);
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalvo);
     }
 
-    @ApiOperation(value = "Atualizar", nickname = "atualizar")
-    @PutMapping("/{codigo}")
-    public ResponseEntity<Produto> atualizar(@PathVariable Long codigo, @PathVariable Long codigoCategoria, @Valid @RequestBody Produto produto) {
-        return ResponseEntity.ok(produtoService.atualizar(codigo, produto));
+    @ApiOperation(value = "Atualizar", nickname = "atualizar produto")
+    @PutMapping("/{codigoProduto}")
+    public ResponseEntity<Produto> atualizar(@PathVariable Long codigoCategoria, @PathVariable Long codigoProduto, @Valid @RequestBody Produto produto) {
+        return ResponseEntity.ok(produtoService.atualizar(codigoCategoria, codigoProduto, produto));
     }
 
-    @ApiOperation(value = "Deletar", nickname = "deletar")
+    @ApiOperation(value = "Deletar", nickname = "deletar produto")
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long codigo, @PathVariable Long codigoCategoria) {
